@@ -9,25 +9,38 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "puppet" do |puppet|
     # Puppet master on Centos 7
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+    end
+
     puppet.vm.box = "centos/7"
-    puppet.vm.hostname = "puppet.example.com"
-    puppet.vm.network :private_network, ip:  "10.0.0.10"
+    puppet.vm.hostname = "puppet.gzcc.com"
+    puppet.vm.network :private_network, ip:  "10.0.20.10"
     puppet.hostmanager.aliases = "%w(puppet)"
+
+    puppet.vm.provision "shell", inline: <<-SHELL
+      sudo yum update -y
+      sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+      sudo yum install puppetserver -y
+      # change jvm heapsize
+      sudo sed -i 's/2g/512m/g' /etc/sysconfig/puppetserver
+    SHELL
+
   end
 
   config.vm.define "agent1" do |agent1|
     # Puppet agent on Centos 7
     agent1.vm.box = "centos/7"
-    agent1.vm.hostname = "agent1.example.com"
-    agent1.vm.network :private_network, ip:  "10.0.0.20"
+    agent1.vm.hostname = "agent1.gzcc.com"
+    agent1.vm.network :private_network, ip:  "10.0.20.20"
     agent1.hostmanager.aliases = "%w(agent1)"
   end
 
   config.vm.define "agent2" do |agent2|
-    # Puppet agent on Debian
+    # Puppet agent on Debian based
     agent2.vm.box = "ubuntu/trusty64"
-    agent2.vm.hostname = "agent2.example.com"
-    agent2.vm.network :private_network, ip:  "10.0.0.21"
+    agent2.vm.hostname = "agent2.gzcc.com"
+    agent2.vm.network :private_network, ip:  "10.0.20.21"
     agent2.hostmanager.aliases = "%w(agent2)"
   end
 
