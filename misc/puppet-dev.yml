@@ -1,0 +1,34 @@
+# ~/.tmuxinator/puppet-dev.yml
+
+name: puppet-dev
+root: ~/puppet-developer
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+startup_window: puppet
+
+windows:
+  - puppet:
+      layout: main-vertical
+      panes:
+        - code:
+          - cd ~/repos/config-management/puppet/puppet-development
+          - atom .
+        - puppetmaster:
+          - cd ~/repos/config-management/puppet/puppet-development/vagrant
+          - vagrant up puppet
+          - vagrant ssh puppet
+          - sudo su
+  - agents:
+      layout: main-vertical
+      panes:
+        - centos7:
+          - cd ~/repos/config-management/puppet/puppet-development/vagrant
+          - vagrant up centos7
+          - vagrant ssh centos7
+        - ubuntu14:
+          - cd ~/repos/config-management/puppet/puppet-development/vagrant
+          - vagrant up ubuntu14
+          - vagrant ssh ubuntu14
+        - windows:
+          - cd ~/repos/config-management/puppet/puppet-development/vagrant
+          - vagrant up windows
