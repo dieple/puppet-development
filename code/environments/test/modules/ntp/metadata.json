@@ -1,12 +1,12 @@
 {
-  "name": "willbutton-ntp",
+  "name": "dieple-ntp",
   "version": "0.1.0",
-  "author": "willbutton",
+  "author": "dieple",
   "summary": "A simple ntp client module to demonstrate creating pupppet modules",
   "license": "Apache-2.0",
-  "source": "https://github.com/rekibnikufesin/puppet-developer",
-  "project_page": "https://gitub.com/rekibnikufesin/puppet-developer/README.md",
-  "issues_url": "https://github.com/rekibnikufesin/puppet-developer/issues",
+  "source": "https://github.com/dieple/puppet-developer",
+  "project_page": "https://gitub.com/dieple/puppet-developer/README.md",
+  "issues_url": "https://github.com/dieple/puppet-developer/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
   ],
