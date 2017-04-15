@@ -72,7 +72,7 @@ configuration files for alternate environments since the Vagrantfile is designed
 }
 ```
 
-#### VMWare
+#### VirtualBox
 ```
 
 {
