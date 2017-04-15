@@ -1,0 +1,58 @@
+{
+  "nodes": {
+    "puppet.example.com": {
+      ":ip": "192.168.10.5",
+			"ports": [
+        {
+          ":fwdhost": 8140,
+          ":fwdguest": 8140,
+          ":id": "port-1"
+        }
+      ],
+      ":memory": 2048,
+      ":bootstrap": "provision/bootstrap-master-centos.sh",
+      ":boxname": "puppetlabs/centos-7.2-64-puppet",
+      ":vendor": "vmware_fusion"
+    },
+    "node01.example.com": {
+      ":ip": "192.168.10.10",
+      "ports": [],
+      ":memory": 1024,
+      ":bootstrap": "provision/bootstrap-agent-centos.sh",
+      ":boxname": "puppetlabs/centos-7.2-64-puppet",
+      ":vendor": "vmware_fusion"
+    },
+    "node02.example.com": {
+      ":ip": "192.168.10.11",
+      "ports": [],
+      ":memory": 1024,
+      ":bootstrap": "provision/bootstrap-agent-centos.sh",
+      ":boxname": "puppetlabs/centos-6.6-64-puppet",
+      ":vendor": "vmware_fusion"
+    },
+    "node03.example.com": {
+      ":ip": "192.168.10.20",
+      "ports": [],
+      ":memory": 1024,
+      ":bootstrap": "provision/bootstrap-agent-ubuntu.sh",
+      ":boxname": "puppetlabs/ubuntu-14.04-64-puppet",
+      ":vendor": "vmware_fusion"
+    },
+    "node04.example.com": {
+      ":ip": "192.168.10.21",
+      "ports": [],
+      ":memory": 1024,
+      ":bootstrap": "provision/bootstrap-agent-ubuntu.sh",
+      ":boxname": "puppetlabs/ubuntu-16.04-64-puppet",
+      ":vendor": "vmware_fusion"
+    },
+    "windows.example.com": {
+      ":ip": "192.168.10.50",
+      "ports": [],
+      ":memory": 1024,
+      ":bootstrap": "provision/windows.ps1",
+      ":boxname": "addle/windows-server-2012-r2",
+      ":vendor": "vmware_fusion"
+    }
+  }
+}

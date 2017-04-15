@@ -1,62 +1,56 @@
-# -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure(2) do |config|
+# Builds Puppet Master and multiple Puppet Agent Nodes using JSON config file
 
-  #config.hostmanager.enabled = true
-  #config.hostmanager.ignore_private_ip = false
-  #config.hostmanager.include_offline = true
+nodes = (JSON.parse(File.read("nodes.json")))['nodes']
 
-  config.vm.define "puppet" do |puppet|
-    config.vm.provider "vmware_fusion" do |v|
-      v.memory = 2048
-    end
+VAGRANTFILE_API_VERSION = "2"
 
-    # Puppet master on Centos 7
-    puppet.vm.synced_folder ".", "/vagrant"
-    puppet.vm.synced_folder "../code", "/puppet_code"
-    puppet.vm.synced_folder "../puppetserver", "/puppet_puppetserver"
-    puppet.vm.box = "geerlingguy/centos7"
-    puppet.vm.hostname = "puppet.example.com"
-    puppet.vm.network :private_network, ip:  "10.0.20.10"
-    #puppet.hostmanager.aliases = "%w(puppet)"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-    puppet.vm.provision "shell" do |s|
-      s.path = "provision/puppetserver.sh"
-      #s.args = VAGRANT_PRIVATE_IP
+  nodes.each do |node|
+    fqdn = node[0] # name of node
+    hostname = fqdn.split('.')[0]
+    node_values = node[1] # content of node
+
+    config.vm.define hostname do |config|
+      # configures all forwarding ports in JSON array
+      ports = node_values['ports']
+      ports.each do |port|
+        config.vm.network :forwarded_port,
+          host:  port[':fwdhost'],
+          guest: port[':fwdguest'],
+          auto_correct: true,
+          id:    port[':id']
+      end
+
+      config.vm.box = node_values[':boxname']
+      config.vm.hostname = fqdn
+      config.vm.network :private_network, ip: node_values[':ip']
+
+      config.vm.provider node_values[':vendor'] do |v|
+        if node_values[':vendor'] == 'virtualbox'
+          v.customize ["modifyvm", :id, "--memory", node_values[':memory']]
+          v.customize ["modifyvm", :id, "--name", fqdn]
+          v.cpus = 2
+        else
+          v.vmx["memsize"] = node_values[':memory']
+          v.vmx["numvcpus"] = "2"
+        end
+      end
+
+      if hostname == 'puppet'
+        config.vm.synced_folder ".", "/vagrant"
+        config.vm.synced_folder "../code", "/puppet_code", owner: "root", group: "root"
+        config.vm.synced_folder "../puppetserver", "/puppet_puppetserver", owner: "root", group: "root"
+      end
+
+      #config.vm.provision "shell", privileged: false, inline: <<-EOF
+      #  echo "Vagrant Box provisioned!"
+      #  echo "Memory is: ******* #{node_values[':memory']} ********"
+      #EOF
+
+      config.vm.provision :shell, :path => node_values[':bootstrap']
     end
   end
-
-  config.vm.define "centos7" do |centos7|
-    # Puppet agent on Centos 7
-    centos7.vm.box = "geerlingguy/centos7"
-    centos7.vm.hostname = "centos7.example.com"
-    centos7.vm.network :private_network, ip:  "10.0.20.20"
-    #centos7.hostmanager.aliases = "%w(centos7)"
-    centos7.vm.provision "shell" do |s|
-      s.path = "provision/centos7.sh"
-    end
-  end
-
-  config.vm.define "ubuntu14" do |ubuntu14|
-    # Puppet agent on Ubuntu based
-    ubuntu14.vm.box = "cobuso/trusty64"
-    ubuntu14.vm.hostname = "ubuntu14.example.com"
-    ubuntu14.vm.network :private_network, ip:  "10.0.20.21"
-    #ubuntu14.hostmanager.aliases = "%w(ubuntu14)"
-    ubuntu14.vm.provision "shell" do |s|
-      s.path = "provision/ubuntu.sh"
-    end
-  end
-
-  config.vm.define "windows" do |w|
-    # Puppet agent on Windowes 2012
-    #w.vm.box = "devopsguys/Windows2012R2Eval"
-    w.vm.box = "addle/windows-server-2012-r2"
-    w.vm.hostname = "windows"
-    w.vm.network :private_network, ip:  "10.0.20.22"
-    #w.hostmanager.aliases = "%w(windows)"
-    w.vm.provision "shell", :path => "provision/windows.ps1"
-  end
-
 end
