@@ -41,8 +41,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       if hostname == 'puppet'
         config.vm.synced_folder ".", "/vagrant"
-        config.vm.synced_folder "../code", "/puppet_code", owner: "root", group: "root"
-        config.vm.synced_folder "../puppetserver", "/puppet_puppetserver", owner: "root", group: "root"
+        config.vm.synced_folder "./code", "/puppet_code", owner: "root", group: "root"
+        config.vm.synced_folder "./puppetserver", "/puppet_puppetserver", owner: "root", group: "root"
       end
 
       #config.vm.provision "shell", privileged: false, inline: <<-EOF
