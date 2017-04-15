@@ -61,6 +61,15 @@ else
     sudo firewall-cmd --zone=public --add-port=8140/tcp --permanent
     sudo firewall-cmd --reload
 
+    #sudo yum -y install rubygems-devel
+    #gem install bundler
+    #bundle install
+    #gem install rake
+    #gem install rspec
+    #gem install puppet-lint
+    #gem install rspec-puppet
+    #gem install puppetlabs_spec_helper
+
     # Install some initial puppet modules on Puppet Master server
     #sudo puppet module install puppetlabs-ntp
     #sudo puppet module install garethr-docker
