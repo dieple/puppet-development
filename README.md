@@ -16,7 +16,7 @@ configuration files for alternate environments since the Vagrantfile is designed
   "nodes": {
     "puppet.example.com": {
       ":ip": "192.168.10.5",
-			"ports": [
+      "ports": [
         {
           ":fwdhost": 8140,
           ":fwdguest": 8140,
@@ -79,7 +79,7 @@ configuration files for alternate environments since the Vagrantfile is designed
   "nodes": {
     "puppet.example.com": {
       ":ip": "192.168.10.5",
-			"ports": [
+      "ports": [
         {
           ":fwdhost": 8140,
           ":fwdguest": 8140,
