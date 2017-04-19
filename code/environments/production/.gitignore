@@ -1,0 +1,4 @@
+.tmp/
+.kitchen/
+modules-lib/
+
